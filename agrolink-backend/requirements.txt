@@ -12,3 +12,4 @@ sentencepiece
 firebase-admin
 python-multipart
 Pillow
+opencv-python-headless
