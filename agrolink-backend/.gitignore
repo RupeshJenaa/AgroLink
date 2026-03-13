@@ -41,3 +41,24 @@ venv/
 # OS files
 .DS_Store
 Thumbs.db
+
+# 🔐 SECURITY — Firebase service account key (NEVER commit this)
+serviceAccountKey.json
+*serviceAccount*.json
+firebase-adminsdk*.json
+
+# 📦 ML Model binaries (too large for GitHub)
+models/*.pkl
+models/*.h5
+models/*.joblib
+models/*.keras
+models/*.pt
+models/*.pth
+
+# 🌿 PlantVillage dataset (large image dataset)
+PlantVillage/
+dataset/
+
+# Large media
+*.mp4
+*.webm
