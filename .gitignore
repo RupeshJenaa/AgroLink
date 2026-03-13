@@ -31,13 +31,7 @@ firebase-adminsdk*.json
 # Jupyter
 .ipynb_checkpoints/
 
-# ML model files (large binaries — host on Git LFS or exclude)
-agrolink-backend/models/*.pkl
-agrolink-backend/models/*.h5
-agrolink-backend/models/*.joblib
-agrolink-backend/models/*.keras
-agrolink-backend/models/*.pt
-agrolink-backend/models/*.pth
+# ML model files are now tracked via Git LFS
 
 # ── Node / Frontend ─────────────────────────────────────────
 node_modules/
