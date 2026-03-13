@@ -47,13 +47,7 @@ serviceAccountKey.json
 *serviceAccount*.json
 firebase-adminsdk*.json
 
-# 📦 ML Model binaries (too large for GitHub)
-models/*.pkl
-models/*.h5
-models/*.joblib
-models/*.keras
-models/*.pt
-models/*.pth
+# ML Model binaries are now tracked via Git LFS
 
 # 🌿 PlantVillage dataset (large image dataset)
 PlantVillage/
