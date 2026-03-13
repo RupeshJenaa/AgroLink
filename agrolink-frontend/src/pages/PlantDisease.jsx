@@ -3,7 +3,7 @@ import React, { useState, useRef } from "react";
 import { useTranslation } from "react-i18next";
 import "./PlantDisease.css";
 
-const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || "http://localhost:8000";
+const BACKEND_URL = process.env.REACT_APP_API_URL || "http://localhost:8000";
 
 const PlantDisease = () => {
   const { i18n } = useTranslation();

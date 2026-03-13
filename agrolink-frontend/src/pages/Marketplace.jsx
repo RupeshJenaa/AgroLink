@@ -57,7 +57,7 @@ const Marketplace = () => {
       }
     };
     fetchListings();
-  }, []);
+  }, [t]);
 
   // ── Auto-predict price when crop, state, quantity are all filled ──────────
   useEffect(() => {

@@ -26,19 +26,31 @@ def initialize_firebase():
         print("✅ Firebase Admin SDK already initialized")
     except ValueError:
         # Not initialized, so initialize now
+        import json
         import os
         
-        # Try to use service account key file
+        # Try to use service account key from environment variable
+        firebase_creds_json = os.environ.get('FIREBASE_SERVICE_ACCOUNT_JSON')
         key_path = os.path.join(os.path.dirname(__file__), 'serviceAccountKey.json')
         
-        if os.path.exists(key_path):
+        if firebase_creds_json:
+            try:
+                cred_dict = json.loads(firebase_creds_json)
+                cred = credentials.Certificate(cred_dict)
+                firebase_admin.initialize_app(cred)
+                print("✅ Firebase Admin SDK initialized with environment variables")
+            except Exception as e:
+                print(f"⚠️  Error parsing FIREBASE_SERVICE_ACCOUNT_JSON: {e}")
+                # Fallback to no-auth initialization
+                firebase_admin.initialize_app(options={'projectId': 'agrolink-8bca7'})
+        elif os.path.exists(key_path):
             # Use service account key file
             cred = credentials.Certificate(key_path)
             firebase_admin.initialize_app(cred)
             print("✅ Firebase Admin SDK initialized with service account key")
         else:
             # Fallback: Initialize without auth (limited functionality)
-            print("⚠️  WARNING: serviceAccountKey.json not found!")
+            print("⚠️  WARNING: serviceAccountKey.json not found and FIREBASE_SERVICE_ACCOUNT_JSON env var not set!")
             print("⚠️  Token verification will NOT work.")
             print("⚠️  Download from: Firebase Console → Project Settings → Service Accounts")
             firebase_admin.initialize_app(options={

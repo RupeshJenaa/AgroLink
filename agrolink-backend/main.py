@@ -19,10 +19,17 @@ async def startup_event():
     except Exception as e:
         print(f"⚠ Warning: Firebase initialization failed: {str(e)}")
 
+import os
+
 # Allow frontend to call backend
+allowed_origins_env = os.environ.get("ALLOWED_ORIGINS", "*")
+allowed_origins = [origin.strip() for origin in allowed_origins_env.split(",") if origin.strip()]
+if not allowed_origins:
+    allowed_origins = ["*"]
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # Or restrict to your frontend domain
+    allow_origins=allowed_origins,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

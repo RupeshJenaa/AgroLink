@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useRef } from "react";
-import { useLanguage } from '../context/LanguageContext';
 import { useTranslation } from 'react-i18next';
 import "../components/Chatbot.css";
 import botIcon from "../assets/icons8-chatbot.gif";
@@ -7,9 +6,8 @@ import botIcon from "../assets/icons8-chatbot.gif";
 const Chatbot = ({ isOpen: externalIsOpen, onClose: externalOnClose }) => {
   const [internalIsOpen, setInternalIsOpen] = useState(false);
   const [input, setInput] = useState("");
-  const { currentLanguage: websiteLanguage } = useLanguage();
   const [chatbotLanguage, setChatbotLanguage] = useState("en");
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
   const [chat, setChat] = useState([]);
   const [isTyping, setIsTyping] = useState(false);
   const suggestions = [
