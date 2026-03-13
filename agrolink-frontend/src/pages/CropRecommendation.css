@@ -1,0 +1,59 @@
+.crop-container {
+  max-width: 700px;
+  margin: 40px auto;
+  padding: 30px;
+  background-color: rgba(255, 255, 255, 0.9); /* translucent white box */
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+
+.crop-form-container h2 {
+  font-size: 24px;
+  margin-bottom: 25px;
+  color: #2d6a4f;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.crop-form-container h2 span {
+  font-size: 22px;
+}
+
+.crop-form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.crop-form input {
+  padding: 12px 16px;
+  font-size: 15px;
+  border: 1px solid #cceccc;
+  border-radius: 8px;
+  outline: none;
+  transition: border-color 0.3s ease;
+}
+
+.crop-form input:focus {
+  border-color: #2d6a4f;
+  box-shadow: 0 0 0 2px rgba(45, 106, 79, 0.1);
+}
+
+.crop-form button {
+  padding: 12px;
+  font-size: 16px;
+  background-color: #2d6a4f;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background-color 0.3s ease;
+}
+
+.crop-form button:hover {
+  background-color: #1e5239;
+}

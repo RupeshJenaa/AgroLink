@@ -1,0 +1,166 @@
+.marketplace-container {
+  max-width: 800px;
+  margin: 60px auto;
+  background-color: rgba(255, 255, 255, 0.92);
+  padding: 30px;
+  border-radius: 16px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+}
+
+.marketplace-form input {
+  width: 100%;
+  margin: 10px 0;
+  padding: 12px;
+  font-size: 16px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+}
+
+.marketplace-form button {
+  background-color: #ffa500;
+  color: white;
+  padding: 12px 20px;
+  border: none;
+  font-weight: bold;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.marketplace-form button:hover {
+  background-color: #e69500;
+}
+
+.marketplace-listings {
+  margin-top: 30px;
+}
+
+.listing-card {
+  background-color: #fff4e6;
+  padding: 20px;
+  margin: 12px 0;
+  border-radius: 10px;
+  box-shadow: 0 0 6px rgba(255, 140, 0, 0.1);
+  text-align: left;
+}
+
+.status-message {
+  margin-top: 15px;
+  text-align: center;
+  font-weight: bold;
+  color: #28a745;
+}
+
+.crop-form {
+  display: flex;
+  flex-direction: column;
+}
+
+.crop-form input,
+.crop-form-select {
+  width: 100%;
+  margin: 10px 0;
+  padding: 12px;
+  font-size: 16px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  box-sizing: border-box;
+  background: #fff;
+}
+
+.crop-form button[type="submit"] {
+  background-color: #ffa500;
+  color: white;
+  padding: 12px 20px;
+  border: none;
+  font-weight: bold;
+  border-radius: 8px;
+  cursor: pointer;
+  margin-top: 10px;
+}
+
+.crop-form button[type="submit"]:hover {
+  background-color: #e69500;
+}
+
+/* ── Price suggestion banner ── */
+.price-field-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.price-hint {
+  padding: 10px 14px;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.price-hint--loading {
+  background: #e8f4fd;
+  color: #1a73e8;
+  border: 1px solid #c8e0fa;
+}
+
+.price-hint--suggestion {
+  background: #e6f9ee;
+  color: #1a7a3c;
+  border: 1px solid #b2dfcc;
+}
+
+.price-hint--error {
+  background: #fff3e0;
+  color: #e65100;
+  border: 1px solid #ffcc80;
+}
+
+.use-price-btn {
+  background: #28a745;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 4px 12px;
+  font-size: 0.82rem;
+  cursor: pointer;
+  font-weight: 600;
+  transition: background 0.2s;
+}
+
+.use-price-btn:hover {
+  background: #218838;
+}
+
+/* ── Role notice ── */
+.role-notice {
+  background: #fff8e1;
+  border: 1px solid #ffe082;
+  border-radius: 12px;
+  padding: 24px;
+  margin: 24px 0;
+  text-align: center;
+}
+
+.role-notice h3 {
+  margin: 0 0 8px;
+  color: #795548;
+}
+
+.role-notice p {
+  margin: 4px 0;
+  color: #5d4037;
+}
+
+.role-notice a {
+  color: #1a73e8;
+  text-decoration: underline;
+}
+
+/* ── Listings grid ── */
+.listings-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 16px;
+}

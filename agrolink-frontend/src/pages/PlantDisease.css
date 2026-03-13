@@ -1,0 +1,331 @@
+/* ─── PlantDisease.css ─── */
+
+.pd-page {
+  min-height: 100vh;
+  padding: 40px 20px 80px;
+  background: linear-gradient(135deg, #0f2027 0%, #203a43 50%, #2c5364 100%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 28px;
+  font-family: 'Inter', 'Segoe UI', sans-serif;
+}
+
+/* ── Hero ── */
+.pd-hero {
+  text-align: center;
+  color: #fff;
+}
+
+.pd-hero-icon {
+  font-size: 3.5rem;
+  margin-bottom: 8px;
+  filter: drop-shadow(0 0 16px rgba(72, 199, 116, 0.6));
+}
+
+.pd-title {
+  font-size: 2.4rem;
+  font-weight: 800;
+  margin: 0 0 8px;
+  background: linear-gradient(135deg, #48c774, #a8e6cf);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.pd-subtitle {
+  font-size: 1rem;
+  color: rgba(255, 255, 255, 0.7);
+  max-width: 520px;
+  line-height: 1.6;
+}
+
+/* ── Upload Card ── */
+.pd-card {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(14px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 20px;
+  padding: 32px;
+  width: 100%;
+  max-width: 560px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* ── Dropzone ── */
+.pd-dropzone {
+  border: 2px dashed rgba(72, 199, 116, 0.5);
+  border-radius: 16px;
+  min-height: 220px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  background: rgba(72, 199, 116, 0.04);
+}
+
+.pd-dropzone:hover:not(.pd-dropzone--has-image) {
+  border-color: #48c774;
+  background: rgba(72, 199, 116, 0.1);
+  transform: scale(1.01);
+}
+
+.pd-dropzone--has-image {
+  cursor: default;
+  border-style: solid;
+  border-color: rgba(72, 199, 116, 0.4);
+}
+
+.pd-dropzone-content {
+  text-align: center;
+  padding: 20px;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.pd-upload-icon {
+  font-size: 3rem;
+  margin-bottom: 12px;
+}
+
+.pd-upload-primary {
+  font-size: 1rem;
+  color: #fff;
+  font-weight: 600;
+  margin: 0 0 4px;
+}
+
+.pd-upload-secondary {
+  margin: 0 0 8px;
+  font-size: 0.9rem;
+}
+
+.pd-upload-hint {
+  font-size: 0.78rem;
+  color: rgba(255, 255, 255, 0.4);
+  margin: 0;
+}
+
+.pd-preview-wrapper {
+  position: relative;
+  width: 100%;
+  text-align: center;
+}
+
+.pd-preview-img {
+  max-width: 100%;
+  max-height: 300px;
+  border-radius: 12px;
+  object-fit: contain;
+}
+
+.pd-change-btn {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  background: rgba(0, 0, 0, 0.65);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 4px 10px;
+  font-size: 0.82rem;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.pd-change-btn:hover {
+  background: rgba(255, 80, 80, 0.8);
+}
+
+/* ── Error ── */
+.pd-error {
+  background: rgba(255, 80, 80, 0.15);
+  border: 1px solid rgba(255, 80, 80, 0.4);
+  border-radius: 10px;
+  padding: 10px 14px;
+  color: #ff8080;
+  font-size: 0.9rem;
+}
+
+/* ── Analyse Button ── */
+.pd-analyze-btn {
+  background: linear-gradient(135deg, #48c774, #2e9e5b);
+  color: #fff;
+  border: none;
+  border-radius: 50px;
+  padding: 14px 32px;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  box-shadow: 0 4px 20px rgba(72, 199, 116, 0.35);
+}
+
+.pd-analyze-btn:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 28px rgba(72, 199, 116, 0.5);
+}
+
+.pd-analyze-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.pd-spinner-group {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  justify-content: center;
+}
+
+.pd-spinner {
+  width: 18px;
+  height: 18px;
+  border: 3px solid rgba(255, 255, 255, 0.3);
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: pd-spin 0.8s linear infinite;
+  display: inline-block;
+}
+
+@keyframes pd-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* ── Result Card ── */
+.pd-result-card {
+  width: 100%;
+  max-width: 560px;
+  border-radius: 20px;
+  padding: 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+  animation: pd-fadeIn 0.4s ease;
+}
+
+.pd-result-card--healthy {
+  background: linear-gradient(135deg, rgba(72, 199, 116, 0.15), rgba(46, 158, 91, 0.08));
+  border: 1px solid rgba(72, 199, 116, 0.35);
+}
+
+.pd-result-card--disease {
+  background: linear-gradient(135deg, rgba(255, 165, 0, 0.12), rgba(255, 80, 50, 0.08));
+  border: 1px solid rgba(255, 165, 0, 0.35);
+}
+
+@keyframes pd-fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.pd-result-header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.pd-result-icon {
+  font-size: 2.8rem;
+}
+
+.pd-result-title {
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: #fff;
+  margin: 0 0 4px;
+}
+
+.pd-result-confidence {
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.65);
+  margin: 0;
+}
+
+.pd-result-section {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.pd-section-label {
+  font-size: 0.85rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: rgba(255, 255, 255, 0.5);
+  margin: 0;
+}
+
+.pd-treatment-text {
+  font-size: 0.97rem;
+  color: rgba(255, 255, 255, 0.85);
+  line-height: 1.65;
+  margin: 0;
+}
+
+/* ── Alt predictions ── */
+.pd-alt-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.pd-alt-item {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 0.88rem;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.pd-bar-track {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 99px;
+  height: 8px;
+  position: relative;
+  overflow: hidden;
+}
+
+.pd-bar-fill {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  background: linear-gradient(90deg, #48c774, #2e9e5b);
+  border-radius: 99px;
+  transition: width 0.6s ease;
+}
+
+.pd-bar-label {
+  font-size: 0.78rem;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+/* ── Heatmap ── */
+.pd-heatmap-desc {
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.75);
+  margin: 0 0 12px;
+}
+
+.pd-heatmap-img {
+  width: 100%;
+  max-width: 400px;
+  border-radius: 12px;
+  align-self: center;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+}

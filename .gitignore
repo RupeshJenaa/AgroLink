@@ -1,0 +1,73 @@
+# ============================================================
+# AgroLink — Root .gitignore
+# ============================================================
+
+# ── Python / Backend ────────────────────────────────────────
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.so
+*.egg
+*.egg-info/
+dist/
+build/
+*.spec
+.eggs/
+
+# Virtual environments
+venv/
+env/
+.venv/
+.env/
+ENV/
+
+# Environment variables / secrets
+.env
+*.env
+secrets.json
+firebase-adminsdk*.json
+
+# Jupyter
+.ipynb_checkpoints/
+
+# ML model files (large binaries — host on Git LFS or exclude)
+agrolink-backend/models/*.pkl
+agrolink-backend/models/*.h5
+agrolink-backend/models/*.joblib
+agrolink-backend/models/*.keras
+agrolink-backend/models/*.pt
+agrolink-backend/models/*.pth
+
+# ── Node / Frontend ─────────────────────────────────────────
+node_modules/
+agrolink-frontend/node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+package-lock.json
+
+# Build output
+agrolink-frontend/build/
+agrolink-frontend/dist/
+
+# ── Dataset (large files) ───────────────────────────────────
+agrolink-backend/PlantVillage/
+agrolink-backend/dataset/
+*.csv
+*.zip
+
+# ── IDE / OS ────────────────────────────────────────────────
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# ── Logs ────────────────────────────────────────────────────
+*.log
+logs/

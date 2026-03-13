@@ -1,0 +1,22 @@
+.page-alert {
+  background-color: #e0f4ff;
+  color: #004080;
+  padding: 10px 20px;
+  text-align: center;
+  font-size: 15px;
+  font-weight: 500;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+  animation: slideDown 0.5s ease-in-out;
+  z-index: 999;
+}
+
+@keyframes slideDown {
+  from {
+    transform: translateY(-10px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0px);
+    opacity: 1;
+  }
+}

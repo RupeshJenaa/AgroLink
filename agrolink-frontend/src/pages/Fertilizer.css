@@ -1,0 +1,246 @@
+.fertilizer-container {
+  max-width: 800px;
+  margin: 60px auto;
+  background-color: rgba(255, 255, 255, 0.92);
+  padding: 30px;
+  border-radius: 16px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+}
+
+.fertilizer-container h2 {
+  color: #27ae60;
+  margin-bottom: 20px;
+}
+
+.fertilizer-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 40px 20px;
+}
+
+.fertilizer-container h2 {
+  text-align: center;
+  color: #2d3748;
+  font-size: 32px;
+  margin-bottom: 10px;
+}
+
+.subtitle {
+  text-align: center;
+  color: #718096;
+  font-size: 16px;
+  margin-bottom: 40px;
+}
+
+.fertilizer-content {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 30px;
+  align-items: start;
+}
+
+@media (max-width: 968px) {
+  .fertilizer-content {
+    grid-template-columns: 1fr;
+  }
+}
+
+.fertilizer-form {
+  background: white;
+  padding: 30px;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.form-section {
+  margin-bottom: 30px;
+}
+
+.form-section h3 {
+  margin: 0 0 20px 0;
+  color: #2d3748;
+  font-size: 18px;
+  padding-bottom: 10px;
+  border-bottom: 2px solid #edf2f7;
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 15px;
+}
+
+.fertilizer-form .form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.fertilizer-form .form-group label {
+  font-weight: 600;
+  color: #4a5568;
+  font-size: 13px;
+  text-transform: none;
+  letter-spacing: normal;
+}
+
+.fertilizer-form .form-group input,
+.fertilizer-form .form-group select {
+  padding: 10px 12px;
+  border: 2px solid #e2e8f0;
+  border-radius: 8px;
+  font-size: 14px;
+  color: #2d3748;
+  background: #ffffff;
+  transition: border-color 0.3s;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+
+.fertilizer-form .form-group input::placeholder {
+  color: #a0aec0;
+}
+
+.fertilizer-form .form-group input:focus,
+.fertilizer-form .form-group select:focus {
+  outline: none;
+  border-color: #48bb78;
+  box-shadow: 0 0 0 3px rgba(72, 187, 120, 0.15);
+  background: #ffffff;
+}
+
+.error-message {
+  background: #fee;
+  color: #c33;
+  padding: 12px;
+  border-radius: 6px;
+  border: 1px solid #fcc;
+  font-size: 14px;
+  margin: 15px 0;
+}
+
+.submit-button {
+  width: 100%;
+  padding: 14px;
+  background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+  margin-top: 10px;
+}
+
+.submit-button:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(72, 187, 120, 0.4);
+}
+
+.submit-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.result-section {
+  background: white;
+  padding: 30px;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.result-section h3 {
+  margin: 0 0 20px 0;
+  color: #2d3748;
+  font-size: 22px;
+}
+
+.main-result {
+  background: linear-gradient(135deg, #48bb7815 0%, #38a16915 100%);
+  padding: 25px;
+  border-radius: 10px;
+  text-align: center;
+  border: 2px solid #48bb78;
+  margin-bottom: 20px;
+}
+
+.fertilizer-name {
+  font-size: 32px;
+  font-weight: 700;
+  color: #2d3748;
+  margin-bottom: 10px;
+}
+
+.confidence {
+  font-size: 16px;
+  color: #48bb78;
+  font-weight: 600;
+}
+
+.usage-tips {
+  background: #ebf8ff;
+  padding: 20px;
+  border-radius: 10px;
+  margin-bottom: 20px;
+  border-left: 4px solid #4299e1;
+}
+
+.usage-tips h4 {
+  margin: 0 0 10px 0;
+  color: #2c5282;
+  font-size: 16px;
+}
+
+.usage-tips p {
+  margin: 0;
+  color: #2d3748;
+  line-height: 1.6;
+  font-size: 14px;
+}
+
+.alternatives {
+  background: #f7fafc;
+  padding: 20px;
+  border-radius: 10px;
+  margin-bottom: 20px;
+}
+
+.alternatives h4 {
+  margin: 0 0 15px 0;
+  color: #2d3748;
+  font-size: 16px;
+}
+
+.alternative-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px 15px;
+  background: white;
+  border-radius: 6px;
+  margin-bottom: 8px;
+  border: 1px solid #e2e8f0;
+}
+
+.alt-name {
+  color: #4a5568;
+  font-weight: 500;
+}
+
+.alt-confidence {
+  color: #718096;
+  font-size: 14px;
+}
+
+.result-details {
+  padding: 15px;
+  background: #fef5e7;
+  border-radius: 8px;
+  border: 1px solid #f9e79f;
+}
+
+.result-details p {
+  margin: 0;
+  color: #7d6608;
+  font-size: 14px;
+}

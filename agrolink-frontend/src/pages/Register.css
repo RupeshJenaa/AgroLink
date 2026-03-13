@@ -1,0 +1,328 @@
+/* ============================================================
+   Register Page — Glassmorphism + Blurred Background
+   Responsive: Mobile, Tablet, Desktop
+   ============================================================ */
+
+/* ----------- Full-Page Background with Blur Overlay ----------- */
+.register-container {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  padding: clamp(16px, 4vw, 40px);
+  overflow: hidden;
+  box-sizing: border-box;
+}
+
+/* The actual background image */
+.register-container::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: url('../assets/farmer-bg.jpg') center center / cover no-repeat;
+  filter: blur(6px) brightness(0.6) saturate(1.3);
+  transform: scale(1.08); /* Prevent blur edge white-out */
+  z-index: 0;
+}
+
+/* Dark-green gradient overlay for depth */
+.register-container::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    145deg,
+    rgba(18, 55, 20, 0.55) 0%,
+    rgba(43, 78, 45, 0.45) 40%,
+    rgba(10, 30, 12, 0.65) 100%
+  );
+  z-index: 1;
+}
+
+/* ----------- Glassmorphism Card ----------- */
+.register-box {
+  position: relative;
+  z-index: 2;
+  background: rgba(255, 255, 255, 0.10);
+  backdrop-filter: blur(22px) saturate(1.6);
+  -webkit-backdrop-filter: blur(22px) saturate(1.6);
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  border-radius: 24px;
+  padding: clamp(28px, 4vw, 48px) clamp(24px, 5vw, 44px);
+  width: 100%;
+  max-width: 480px;
+  box-shadow:
+    0 8px 32px rgba(0, 0, 0, 0.4),
+    0 1px 0 rgba(255, 255, 255, 0.12) inset;
+  animation: cardSlideIn 0.6s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@keyframes cardSlideIn {
+  from { opacity: 0; transform: translateY(32px) scale(0.97); }
+  to   { opacity: 1; transform: translateY(0)   scale(1);    }
+}
+
+/* ----------- Logo / Brand Badge ----------- */
+.register-brand {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.register-brand-icon {
+  width: 44px;
+  height: 44px;
+  background: linear-gradient(135deg, #efc241, #a0791e);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  box-shadow: 0 4px 14px rgba(239, 194, 65, 0.45);
+}
+
+.register-brand-name {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(20px, 3vw, 26px);
+  font-weight: 700;
+  color: #ffffff;
+  letter-spacing: 0.5px;
+  text-shadow: 0 2px 8px rgba(0,0,0,0.4);
+}
+
+/* ----------- Heading ----------- */
+.register-box h2 {
+  margin: 0 0 6px 0;
+  color: #ffffff;
+  text-align: center;
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(22px, 4vw, 30px);
+  font-weight: 700;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+  letter-spacing: 0.3px;
+}
+
+.register-subtitle {
+  text-align: center;
+  color: rgba(255, 255, 255, 0.72);
+  margin-bottom: 28px;
+  font-size: clamp(13px, 2vw, 15px);
+  font-weight: 400;
+  letter-spacing: 0.2px;
+}
+
+/* ----------- Error ----------- */
+.error-message {
+  background: rgba(220, 38, 38, 0.18);
+  color: #fca5a5;
+  padding: 12px 14px;
+  border-radius: 10px;
+  margin-bottom: 18px;
+  border: 1px solid rgba(220, 38, 38, 0.35);
+  font-size: 13.5px;
+  backdrop-filter: blur(6px);
+}
+
+/* ----------- Form ----------- */
+.register-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+.form-group label {
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.88);
+  font-size: clamp(12px, 1.8vw, 14px);
+  letter-spacing: 0.4px;
+  text-transform: uppercase;
+}
+
+.form-group input,
+.form-group select {
+  padding: 13px 16px;
+  background: rgba(255, 255, 255, 0.12);
+  border: 1.5px solid rgba(255, 255, 255, 0.25);
+  border-radius: 12px;
+  font-size: clamp(14px, 2vw, 15px);
+  color: #ffffff;
+  font-family: 'Inter', sans-serif;
+  transition: border-color 0.28s, background 0.28s, box-shadow 0.28s;
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.form-group input::placeholder {
+  color: rgba(255, 255, 255, 0.45);
+}
+
+.form-group input:focus,
+.form-group select:focus {
+  outline: none;
+  border-color: #efc241;
+  background: rgba(255, 255, 255, 0.18);
+  box-shadow: 0 0 0 3px rgba(239, 194, 65, 0.2);
+}
+
+/* Select Dropdown Styling */
+.form-group select {
+  cursor: pointer;
+  appearance: none;
+  -webkit-appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='rgba(255,255,255,0.6)' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 14px center;
+  background-size: 18px;
+  padding-right: 42px;
+  background-color: transparent;
+}
+
+.form-group select option {
+  background: #1a2f1c;
+  color: #ffffff;
+  font-size: 14px;
+}
+
+/* ----------- Role Selector Grid ----------- */
+.role-selector {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.role-option {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 14px 10px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1.5px solid rgba(255, 255, 255, 0.2);
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.25s;
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.75);
+  text-align: center;
+  font-family: 'Inter', sans-serif;
+}
+
+.role-option:hover {
+  background: rgba(255, 255, 255, 0.15);
+  border-color: rgba(239, 194, 65, 0.5);
+}
+
+.role-option.active {
+  background: rgba(239, 194, 65, 0.18);
+  border-color: #efc241;
+  color: #efc241;
+  font-weight: 600;
+  box-shadow: 0 0 12px rgba(239, 194, 65, 0.2);
+}
+
+.role-option .role-icon {
+  font-size: 24px;
+}
+
+/* ----------- Submit Button ----------- */
+.register-button {
+  padding: 14px;
+  background: linear-gradient(135deg, #efc241 0%, #c8920a 100%);
+  color: #1a1a1a;
+  border: none;
+  border-radius: 12px;
+  font-size: clamp(14px, 2vw, 16px);
+  font-weight: 700;
+  cursor: pointer;
+  font-family: 'Inter', sans-serif;
+  letter-spacing: 0.5px;
+  transition: transform 0.22s, box-shadow 0.22s, filter 0.22s;
+  box-shadow: 0 4px 18px rgba(239, 194, 65, 0.45);
+  margin-top: 8px;
+  width: 100%;
+}
+
+.register-button:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 26px rgba(239, 194, 65, 0.55);
+  filter: brightness(1.06);
+}
+
+.register-button:active:not(:disabled) {
+  transform: translateY(0px);
+}
+
+.register-button:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* ----------- Footer ----------- */
+.register-footer {
+  margin-top: 22px;
+  text-align: center;
+}
+
+.register-footer p {
+  color: rgba(255, 255, 255, 0.65);
+  font-size: clamp(12px, 1.8vw, 14px);
+}
+
+.login-link {
+  color: #efc241;
+  text-decoration: none;
+  font-weight: 600;
+  transition: color 0.2s, text-shadow 0.2s;
+}
+
+.login-link:hover {
+  color: #f5d46a;
+  text-decoration: underline;
+  text-shadow: 0 0 8px rgba(239, 194, 65, 0.5);
+}
+
+/* ----------- Responsive: Mobile (< 480px) ----------- */
+@media (max-width: 480px) {
+  .register-box {
+    border-radius: 20px;
+    padding: 28px 18px;
+  }
+
+  .register-brand-icon {
+    width: 38px;
+    height: 38px;
+    font-size: 18px;
+    border-radius: 10px;
+  }
+
+  .role-selector {
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+}
+
+/* ----------- Responsive: Tablet (481px – 768px) ----------- */
+@media (min-width: 481px) and (max-width: 768px) {
+  .register-box {
+    max-width: 440px;
+  }
+}
+
+/* ----------- Responsive: Large Desktop (> 1440px) ----------- */
+@media (min-width: 1440px) {
+  .register-box {
+    max-width: 520px;
+  }
+}
