@@ -22,15 +22,16 @@ async def startup_event():
 import os
 
 # Allow frontend to call backend
-allowed_origins_env = os.environ.get("ALLOWED_ORIGINS", "*")
+allowed_origins_env = os.environ.get(
+    "ALLOWED_ORIGINS", 
+    "https://agro-link-swart.vercel.app,http://localhost:3000,http://localhost:3001,http://localhost:5173"
+)
 allowed_origins = [origin.strip() for origin in allowed_origins_env.split(",") if origin.strip()]
-if not allowed_origins:
-    allowed_origins = ["*"]
 
 app.add_middleware(
     CORSMiddleware,
     allow_origins=allowed_origins,
-    allow_credentials=(allowed_origins != ["*"]),
+    allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
