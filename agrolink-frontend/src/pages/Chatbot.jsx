@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useTranslation } from 'react-i18next';
+import { chatbot } from '../services/api';
 import "../components/Chatbot.css";
 import botIcon from "../assets/icons8-chatbot.gif";
 
@@ -42,7 +43,7 @@ const Chatbot = ({ isOpen: externalIsOpen, onClose: externalOnClose }) => {
       kn: "ಹಲೋ! ನಾನು ನಿಮ್ಮ ಎಐ-ಚಾಲಿತ ಕೃಷಿ ಸಹಾಯಕನಾಗಿದ್ದೇನೆ. ಬೆಳೆಗಳು, ಗೊಬ್ಬರಗಳು, ಹವಾಮಾನ ಅಥವಾ ಸಸ್ಯ ರೋಗಗಳ ಬಗ್ಗೆ ನನಗೆ ಏನು ಕೇಳಿ!",
       mr: "हॅलो! मी तुमचा एआय-आधारित कृषी सहाय्यक आहे. पीक, खत, हवामान किंवा वनस्पती रोगांविषयी मला काहीही विचारा!"
     };
-    
+
     setChat([{ type: "bot", message: initialMessages[chatbotLanguage] || initialMessages.en }]);
   }, [chatbotLanguage]);
 
@@ -54,23 +55,10 @@ const Chatbot = ({ isOpen: externalIsOpen, onClose: externalOnClose }) => {
     setIsTyping(true);
     try {
       console.log("Sending question:", input, "in language:", chatbotLanguage);
-      const response = await fetch("/api/chatbot/ask", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ 
-          question: input, 
-          language: chatbotLanguage 
-        }),
-      });
+      const data = await chatbot.ask(input, chatbotLanguage);
 
-      // Check if the response is ok
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-
-      const data = await response.json();
       console.log("Received response:", data);
-      
+
       // Check if we got a valid response
       if (data && data.reply) {
         setChat((prev) => [...prev, { type: "bot", message: data.reply }]);
@@ -158,9 +146,9 @@ const Chatbot = ({ isOpen: externalIsOpen, onClose: externalOnClose }) => {
             {/* Language selection for chatbot */}
             <div className="chatbot-language-selector">
               <label htmlFor="chatbot-language">{t('common.selectLanguage')}:</label>
-              <select 
+              <select
                 id="chatbot-language"
-                value={chatbotLanguage} 
+                value={chatbotLanguage}
                 onChange={(e) => setChatbotLanguage(e.target.value)}
                 className="language-dropdown"
               >
@@ -233,8 +221,8 @@ const Chatbot = ({ isOpen: externalIsOpen, onClose: externalOnClose }) => {
               onKeyDown={handleKeyPress}
               rows="1"
             />
-            <button 
-              className="send-button" 
+            <button
+              className="send-button"
               onClick={handleSend}
               disabled={!input.trim()}
             >

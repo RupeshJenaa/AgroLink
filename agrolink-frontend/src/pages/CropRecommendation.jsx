@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { crop } from '../services/api';
 import './CropRecommendation.css';
 
 function CropRecommendation() {
@@ -24,25 +25,17 @@ function CropRecommendation() {
     e.preventDefault();
 
     try {
-      const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:8000';
-      const response = await fetch(`${API_URL}/api/crop/predict?lang=${i18n.language}`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(formData),
-      });
+      const data = await crop.predict(formData, i18n.language);
 
-      const data = await response.json();
-
-      if (response.ok) {
-        setResult(`Recommended crop: ${data.recommended_crop}`);
-      } else {
-        setResult(`Error: ${data.error || 'Something went wrong'}`);
-      }
+      setResult(`Recommended crop: ${data.recommended_crop}`);
     } catch (error) {
       console.error('API Error:', error);
-      setResult(t('crop.connectionError'));
+      const errorMsg = error.response?.data?.error || error.response?.data?.detail || 'Something went wrong';
+      if (error.response) {
+        setResult(`Error: ${errorMsg}`);
+      } else {
+        setResult(t('crop.connectionError'));
+      }
     }
   };
 

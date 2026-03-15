@@ -9,7 +9,7 @@ import axios from 'axios';
 import { auth } from '../firebaseConfig';
 
 // Base URL for the backend API
-const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:8000';
+export const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:8000';
 
 // Create axios instance
 const apiClient = axios.create({
@@ -148,8 +148,8 @@ export const crop = {
     /**
      * Get crop recommendation
      */
-    predict: async (data) => {
-        const response = await apiClient.post('/api/crop/predict', data);
+    predict: async (data, lang = "en") => {
+        const response = await apiClient.post(`/api/crop/predict?lang=${lang}`, data);
         return response.data;
     },
 };
@@ -161,8 +161,8 @@ export const chatbot = {
     /**
      * Send message to chatbot
      */
-    ask: async (message, language) => {
-        const response = await apiClient.post('/api/chatbot/ask', { message, language });
+    ask: async (question, language) => {
+        const response = await apiClient.post('/api/chatbot/ask', { question, language });
         return response.data;
     },
 };

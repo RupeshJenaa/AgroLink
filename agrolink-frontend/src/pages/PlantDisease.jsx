@@ -1,9 +1,8 @@
 // src/pages/PlantDisease.jsx
 import React, { useState, useRef } from "react";
 import { useTranslation } from "react-i18next";
+import { API_BASE_URL } from '../services/api';
 import "./PlantDisease.css";
-
-const BACKEND_URL = process.env.REACT_APP_API_URL || "http://localhost:8000";
 
 const PlantDisease = () => {
   const { i18n } = useTranslation();
@@ -45,7 +44,7 @@ const PlantDisease = () => {
       const formData = new FormData();
       formData.append("file", imageFile);
 
-      const response = await fetch(`${BACKEND_URL}/api/disease/predict?lang=${i18n.language}`, {
+      const response = await fetch(`${API_BASE_URL}/api/disease/predict?lang=${i18n.language}`, {
         method: "POST",
         body: formData,
       });
