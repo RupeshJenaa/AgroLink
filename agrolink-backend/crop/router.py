@@ -49,7 +49,7 @@ async def predict_crop(request: CropRecommendationRequest, lang: str = "en"):
         prediction_proba = model.predict_proba(input_scaled)
         
         # Get the crop name
-        crop_name = label_encoder.inverse_transform(prediction)[0]
+        crop_name = str(label_encoder.inverse_transform(prediction)[0])
         
         # Get confidence score
         confidence = float(np.max(prediction_proba) * 100)

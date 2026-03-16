@@ -162,7 +162,7 @@ async def recommend_fertilizer(request: FertilizerRequest, lang: str = "en"):
         prediction_proba = model.predict_proba(input_data)[0]
         
         # Get recommended fertilizer
-        recommended_fertilizer = le_fertilizer.inverse_transform(prediction)[0]
+        recommended_fertilizer = str(le_fertilizer.inverse_transform(prediction)[0])
         confidence = float(np.max(prediction_proba) * 100)
         
         # Get alternative recommendations (top 3)
@@ -170,7 +170,7 @@ async def recommend_fertilizer(request: FertilizerRequest, lang: str = "en"):
         alternatives = []
         
         for idx in top_3_indices[1:]:  # Skip the first one as it's the main recommendation
-            fert_name = le_fertilizer.inverse_transform([idx])[0]
+            fert_name = str(le_fertilizer.inverse_transform([idx])[0])
             fert_confidence = float(prediction_proba[idx] * 100)
             if fert_confidence > 5:  # Only include if confidence > 5%
                 alternatives.append({

@@ -31,6 +31,12 @@ try:
     import torch.nn as nn
     from torchvision import models, transforms
     from torchvision.models import MobileNet_V2_Weights
+    
+    # 🔴 CRITICAL FOR RENDER: 🔴
+    # Limit number of CPU threads to 1 to drastically reduce 
+    # memory allocated for PyTorch's OpenMP thread pools.
+    torch.set_num_threads(1)
+    
     _TORCH_AVAILABLE = True
 except ImportError:
     _TORCH_AVAILABLE = False
