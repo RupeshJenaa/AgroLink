@@ -138,8 +138,14 @@ class GradCAM:
         self.target_layer = target_layer
         self.gradients = None
         self.activations = None
-        self.target_layer.register_forward_hook(self.save_activation)
-        self.target_layer.register_full_backward_hook(self.save_gradient)
+        self.forward_handle = self.target_layer.register_forward_hook(self.save_activation)
+        self.backward_handle = self.target_layer.register_full_backward_hook(self.save_gradient)
+
+    def remove_hooks(self):
+        if hasattr(self, 'forward_handle') and self.forward_handle:
+            self.forward_handle.remove()
+        if hasattr(self, 'backward_handle') and self.backward_handle:
+            self.backward_handle.remove()
 
     def save_activation(self, module, input, output):
         self.activations = output.detach()
@@ -227,6 +233,9 @@ async def predict_disease(file: UploadFile = File(...), lang: str = "en"):
             heatmap_b64 = "data:image/jpeg;base64," + base64.b64encode(buffered.getvalue()).decode("utf-8")
         except Exception as cam_err:
             print(f"Grad-CAM generation failed: {cam_err}")
+        finally:
+            if 'cam' in locals():
+                cam.remove_hooks()
 
         # Top-3 predictions
         top3_indices = np.argsort(proba_np)[::-1][:3]
@@ -245,6 +254,11 @@ async def predict_disease(file: UploadFile = File(...), lang: str = "en"):
         )
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Prediction error: {e}")
+    finally:
+        import gc
+        gc.collect()
+        if torch.cuda.is_available():
+            torch.cuda.empty_cache()
 
 
 @disease_router.get("/classes")

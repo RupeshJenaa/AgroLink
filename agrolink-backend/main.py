@@ -26,7 +26,7 @@ allowed_origins_env = os.environ.get(
     "ALLOWED_ORIGINS", 
     "https://agro-link-swart.vercel.app,http://localhost:3000,http://localhost:3001,http://localhost:5173"
 )
-allowed_origins = [origin.strip() for origin in allowed_origins_env.split(",") if origin.strip()]
+allowed_origins = [origin.strip().rstrip('/') for origin in allowed_origins_env.split(",") if origin.strip()]
 
 app.add_middleware(
     CORSMiddleware,
