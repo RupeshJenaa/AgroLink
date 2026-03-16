@@ -136,43 +136,8 @@ class DiseasePredictionResponse(BaseModel):
     heatmap_image:   Optional[str] = None
     all_predictions: Optional[list] = None
 
-# ── Grad-CAM Helper ───────────────────────────────────────────────────────────
-
-class GradCAM:
-    def __init__(self, model, target_layer):
-        self.model = model
-        self.target_layer = target_layer
-        self.gradients = None
-        self.activations = None
-        self.forward_handle = self.target_layer.register_forward_hook(self.save_activation)
-        self.backward_handle = self.target_layer.register_full_backward_hook(self.save_gradient)
-
-    def remove_hooks(self):
-        if hasattr(self, 'forward_handle') and self.forward_handle:
-            self.forward_handle.remove()
-        if hasattr(self, 'backward_handle') and self.backward_handle:
-            self.backward_handle.remove()
-
-    def save_activation(self, module, input, output):
-        self.activations = output.detach()
-
-    def save_gradient(self, module, grad_input, grad_output):
-        self.gradients = grad_output[0].detach()
-
-    def generate(self, input_tensor, target_class):
-        self.model.zero_grad()
-        output = self.model(input_tensor)
-        target = output[0, target_class]
-        target.backward()
-
-        pooled_gradients = torch.mean(self.gradients, dim=[0, 2, 3])
-        for i in range(self.activations.shape[1]):
-            self.activations[:, i, :, :] *= pooled_gradients[i]
-
-        heatmap = torch.mean(self.activations, dim=1).squeeze()
-        heatmap = torch.nn.functional.relu(heatmap)
-        heatmap /= torch.max(heatmap)
-        return heatmap.cpu().numpy()
+# ── Heatmap Disabled for Memory Optimization ──────────────────────────────────
+# GradCAM is disabled because gradient computation exceeds Render's 512MB limit
 
 
 # ── Endpoints ─────────────────────────────────────────────────────────────────
@@ -203,45 +168,23 @@ async def predict_disease(file: UploadFile = File(...), lang: str = "en"):
         image_bytes = await file.read()
         tensor, original_img = _preprocess_image(image_bytes)
         tensor = tensor.to(_device)
-        tensor.requires_grad = True
+        tensor.requires_grad = False
     except Exception as e:
         raise HTTPException(status_code=400, detail=f"Could not process image: {e}")
 
     try:
-        # We need gradients for Grad-CAM
-        logits = _model(tensor)                  # (1, num_classes)
-        proba  = torch.softmax(logits, dim=1)[0] # (num_classes,)
+        # Evaluate model with NO GRADIENTS to drastically save memory
+        with torch.no_grad():
+            logits = _model(tensor)                  # (1, num_classes)
+            proba  = torch.softmax(logits, dim=1)[0] # (num_classes,)
 
-        proba_np  = proba.detach().cpu().numpy()
-        top_idx   = int(np.argmax(proba_np))
+            proba_np  = proba.detach().cpu().numpy()
+            top_idx   = int(np.argmax(proba_np))
 
-        disease_label = _labels.get(str(top_idx), "Unknown")
-        treatment     = _treatments.get(disease_label, "Consult a local agricultural extension officer.")
-
-        # Generate Grad-CAM Heatmap
-        heatmap_b64 = None
-        try:
-            target_layer = _model.features[-1]
-            cam = GradCAM(_model, target_layer)
-            heatmap = cam.generate(tensor, top_idx)
-
-            heatmap_resized = cv2.resize(heatmap, (original_img.width, original_img.height))
-            heatmap_resized = np.uint8(255 * heatmap_resized)
-            heatmap_colored = cv2.applyColorMap(heatmap_resized, cv2.COLORMAP_JET)
-
-            original_cv = cv2.cvtColor(np.array(original_img), cv2.COLOR_RGB2BGR)
-            overlayed = cv2.addWeighted(original_cv, 0.5, heatmap_colored, 0.5, 0)
-            overlayed_rgb = cv2.cvtColor(overlayed, cv2.COLOR_BGR2RGB)
-
-            final_img = Image.fromarray(overlayed_rgb)
-            buffered = io.BytesIO()
-            final_img.save(buffered, format="JPEG")
-            heatmap_b64 = "data:image/jpeg;base64," + base64.b64encode(buffered.getvalue()).decode("utf-8")
-        except Exception as cam_err:
-            print(f"Grad-CAM generation failed: {cam_err}")
-        finally:
-            if 'cam' in locals():
-                cam.remove_hooks()
+            disease_label = _labels.get(str(top_idx), "Unknown")
+            treatment     = _treatments.get(disease_label, "Consult a local agricultural extension officer.")
+            
+            heatmap_b64 = None # Heatmap feature disabled for memory limits
 
         # Top-3 predictions
         top3_indices = np.argsort(proba_np)[::-1][:3]
