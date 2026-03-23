@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { useTranslation } from 'react-i18next';
@@ -16,7 +16,8 @@ import {
   FaUserPlus,
   FaSignOutAlt,
   FaBars,
-  FaTimes
+  FaTimes,
+  FaChevronDown
 } from "react-icons/fa";
 import icon from "../assets/icon.png";
 
@@ -28,6 +29,19 @@ const Navbar = () => {
   const { isAuthenticated, user, role, logout } = useAuth();
   const navigate = useNavigate();
   const [menuOpen, setMenuOpen] = useState(false);
+
+  // Lock body scroll when drawer is open on mobile
+  useEffect(() => {
+    document.body.style.overflow = menuOpen ? 'hidden' : '';
+    return () => { document.body.style.overflow = ''; };
+  }, [menuOpen]);
+
+  // Close on Escape
+  useEffect(() => {
+    const onEsc = (e) => { if (e.key === 'Escape') setMenuOpen(false); };
+    document.addEventListener('keydown', onEsc);
+    return () => document.removeEventListener('keydown', onEsc);
+  }, []);
 
   const handleLogout = async () => {
     try {
@@ -60,7 +74,7 @@ const Navbar = () => {
     ? [...baseNavItems, ...farmerNavItems]
     : baseNavItems;
 
-  // Language options for website
+  // Language options
   const languageOptions = [
     { code: 'en', name: 'English' },
     { code: 'hi', name: 'हिंदी' },
@@ -78,57 +92,153 @@ const Navbar = () => {
 
   return (
     <nav className="navbar" role="navigation" aria-label="Main navigation">
+      {/* Logo */}
       <div className="logo">
         <img src={icon} alt="AgroLink Icon" className="navbar-icon" />
         <span>AgroLink</span>
       </div>
 
-      {/* Hamburger toggle button — only visible on mobile */}
+      {/* ── Desktop nav-menu (hidden on mobile via CSS) ── */}
+      <div className="nav-menu">
+        <ul className="nav-links">
+          {navItems.map(({ to, label, icon: navIcon }) => (
+            <li key={to}>
+              <NavLink
+                to={to}
+                className={({ isActive }) => (isActive ? "active-link" : "")}
+              >
+                <motion.div whileHover={{ scale: 1.07 }} whileTap={{ scale: 0.95 }} style={{ display: 'flex', alignItems: 'center' }}>
+                  <span className="nav-icon">{navIcon}</span>
+                  {label}
+                </motion.div>
+              </NavLink>
+            </li>
+          ))}
+        </ul>
+
+        <div className="navbar-right">
+          {/* Language Selector */}
+          <div className="language-selector">
+            <div className="language-link">
+              <FaGlobe className="language-icon" aria-hidden="true" />
+              <select
+                value={currentLanguage}
+                onChange={handleLanguageChange}
+                className="language-dropdown"
+                aria-label="Select language"
+              >
+                {languageOptions.map((lang) => (
+                  <option key={lang.code} value={lang.code}>
+                    {lang.name}
+                  </option>
+                ))}
+              </select>
+            </div>
+          </div>
+
+          {/* Auth */}
+          <div className="auth-section">
+            {isAuthenticated ? (
+              <>
+                <span className="user-info">{user?.email} ({role})</span>
+                <button onClick={handleLogout} className="auth-button logout-button">
+                  <FaSignOutAlt aria-hidden="true" /> Logout
+                </button>
+              </>
+            ) : (
+              <>
+                <NavLink to="/login" className="auth-button login-button">
+                  <FaSignInAlt aria-hidden="true" /> Login
+                </NavLink>
+                <NavLink to="/register" className="auth-button register-button">
+                  <FaUserPlus aria-hidden="true" /> Register
+                </NavLink>
+              </>
+            )}
+          </div>
+        </div>
+      </div>
+
+      {/* ── Hamburger button (mobile only) ── */}
       <button
         className={`hamburger-btn ${menuOpen ? 'open' : ''}`}
         onClick={() => setMenuOpen(!menuOpen)}
         aria-label={menuOpen ? 'Close menu' : 'Open menu'}
         aria-expanded={menuOpen}
-        aria-controls="nav-menu"
+        aria-controls="mobile-drawer"
       >
-        {menuOpen ? <FaTimes /> : <FaBars />}
+        <FaBars />
       </button>
 
-      {/* Nav Menu */}
+      {/* ── Mobile Slide-in Drawer ── */}
       <AnimatePresence>
-        {(menuOpen || true) && (
-          <motion.div
-            id="nav-menu"
-            className={`nav-menu ${menuOpen ? 'nav-menu--open' : ''}`}
-            initial={false}
-          >
-            <ul className="nav-links">
-              {navItems.map(({ to, label, icon }) => (
-                <li key={to}>
-                  <NavLink
-                    to={to}
-                    className={({ isActive }) => (isActive ? "active-link" : "")}
-                    onClick={handleNavClick}
-                  >
-                    <motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.95 }}>
-                      <span className="nav-icon">{icon}</span>
-                      {label}
-                    </motion.div>
-                  </NavLink>
-                </li>
-              ))}
-            </ul>
+        {menuOpen && (
+          <>
+            {/* Dark backdrop */}
+            <motion.div
+              className="drawer-backdrop"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.25 }}
+              onClick={() => setMenuOpen(false)}
+              aria-hidden="true"
+            />
 
-            {/* Right side: Language selector and Auth */}
-            <div className="navbar-right">
-              {/* Language Selector */}
-              <div className="language-selector">
-                <div className="language-link">
-                  <FaGlobe className="language-icon" aria-hidden="true" />
+            {/* Drawer panel */}
+            <motion.div
+              id="mobile-drawer"
+              className="mobile-drawer"
+              initial={{ x: '-100%' }}
+              animate={{ x: 0 }}
+              exit={{ x: '-100%' }}
+              transition={{ type: 'tween', duration: 0.28, ease: 'easeInOut' }}
+              role="dialog"
+              aria-modal="true"
+              aria-label="Navigation menu"
+            >
+              {/* Drawer header */}
+              <div className="drawer-header">
+                <div className="logo">
+                  <img src={icon} alt="AgroLink Icon" className="navbar-icon" />
+                  <span>AgroLink</span>
+                </div>
+                <button
+                  className="drawer-close-btn"
+                  onClick={() => setMenuOpen(false)}
+                  aria-label="Close menu"
+                >
+                  <FaTimes />
+                </button>
+              </div>
+
+              {/* Drawer nav links */}
+              <ul className="drawer-nav-links">
+                {navItems.map(({ to, label, icon: navIcon }) => (
+                  <li key={to}>
+                    <NavLink
+                      to={to}
+                      className={({ isActive }) =>
+                        `drawer-link${isActive ? ' drawer-link--active' : ''}`
+                      }
+                      onClick={handleNavClick}
+                    >
+                      <span className="drawer-link-icon">{navIcon}</span>
+                      <span className="drawer-link-label">{label}</span>
+                    </NavLink>
+                  </li>
+                ))}
+              </ul>
+
+              {/* Drawer footer: language + auth */}
+              <div className="drawer-footer">
+                {/* Language */}
+                <div className="drawer-language-selector">
+                  <FaGlobe className="drawer-globe-icon" aria-hidden="true" />
                   <select
                     value={currentLanguage}
                     onChange={handleLanguageChange}
-                    className="language-dropdown"
+                    className="drawer-language-dropdown"
                     aria-label="Select language"
                   >
                     {languageOptions.map((lang) => (
@@ -137,33 +247,33 @@ const Navbar = () => {
                       </option>
                     ))}
                   </select>
+                  <FaChevronDown className="drawer-chevron-icon" aria-hidden="true" />
                 </div>
-              </div>
 
-              {/* Authentication UI */}
-              <div className="auth-section">
+                {/* Auth */}
                 {isAuthenticated ? (
-                  <>
-                    <span className="user-info">
-                      {user?.email} ({role})
-                    </span>
-                    <button onClick={handleLogout} className="auth-button logout-button">
-                      <FaSignOutAlt aria-hidden="true" /> Logout
+                  <div className="drawer-auth">
+                    <span className="drawer-user-info">{user?.email} ({role})</span>
+                    <button onClick={handleLogout} className="drawer-logout-btn">
+                      <FaSignOutAlt aria-hidden="true" />
+                      Logout
                     </button>
-                  </>
+                  </div>
                 ) : (
-                  <>
-                    <NavLink to="/login" className="auth-button login-button" onClick={handleNavClick}>
-                      <FaSignInAlt aria-hidden="true" /> Login
+                  <div className="drawer-auth">
+                    <NavLink to="/login" className="drawer-login-btn" onClick={handleNavClick}>
+                      <FaSignInAlt aria-hidden="true" />
+                      Login
                     </NavLink>
-                    <NavLink to="/register" className="auth-button register-button" onClick={handleNavClick}>
-                      <FaUserPlus aria-hidden="true" /> Register
+                    <NavLink to="/register" className="drawer-logout-btn" onClick={handleNavClick}>
+                      <FaUserPlus aria-hidden="true" />
+                      Register
                     </NavLink>
-                  </>
+                  </div>
                 )}
               </div>
-            </div>
-          </motion.div>
+            </motion.div>
+          </>
         )}
       </AnimatePresence>
     </nav>

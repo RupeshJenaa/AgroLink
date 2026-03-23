@@ -1,5 +1,5 @@
 /* ============================================================
-   Base Navbar (Desktop)
+   Base Navbar (Desktop) — UNCHANGED
    ============================================================ */
 .navbar {
   display: flex;
@@ -37,7 +37,7 @@
   object-fit: contain;
 }
 
-/* ---- Hamburger button — hidden on desktop ---- */
+/* ---- Hamburger button (hidden on desktop) ---- */
 .hamburger-btn {
   display: none;
   background: none;
@@ -59,12 +59,16 @@
   color: var(--primary-dark-green);
 }
 
-/* ---- Desktop-only wrapper ---- */
-.desktop-only {
+/* ---- Nav menu wrapper ---- */
+.nav-menu {
   display: flex;
+  align-items: center;
+  gap: 24px;
+  flex: 1;
+  justify-content: space-between;
 }
 
-/* ---- Desktop Nav Links ---- */
+/* ---- Nav Links ---- */
 .nav-links {
   list-style: none;
   display: flex;
@@ -91,11 +95,6 @@
   position: relative;
   transition: color 0.28s ease;
   white-space: nowrap;
-}
-
-.nav-link-inner {
-  display: flex;
-  align-items: center;
 }
 
 .nav-links a::after {
@@ -137,7 +136,7 @@
   opacity: 1;
 }
 
-/* ---- Desktop Right Side ---- */
+/* ---- Right Side ---- */
 .navbar-right {
   display: flex;
   align-items: center;
@@ -239,7 +238,7 @@
 }
 
 /* ============================================================
-   Tablet (≤ 900px)
+   Tablet (≤ 900px) — UNCHANGED
    ============================================================ */
 @media (max-width: 900px) {
   .navbar {
@@ -256,23 +255,23 @@
 }
 
 /* ============================================================
-   Mobile (≤ 768px) — Drawer menu
+   Mobile (≤ 768px) — Show hamburger, hide desktop nav
    ============================================================ */
 @media (max-width: 768px) {
   .navbar {
     padding: 14px 20px;
-    flex-wrap: nowrap;
   }
 
-  /* Show hamburger, hide desktop items */
+  /* Show the hamburger button */
   .hamburger-btn {
     display: flex;
     align-items: center;
     justify-content: center;
   }
 
-  .desktop-only {
-    display: none !important;
+  /* Hide the desktop nav-menu completely */
+  .nav-menu {
+    display: none;
   }
 
   /* ── Backdrop ── */
@@ -291,13 +290,12 @@
     left: 0;
     width: min(85vw, 320px);
     height: 100dvh;
-    /* full viewport height */
     background-color: var(--bg-beige, #f5f0e8);
     z-index: 1001;
     display: flex;
     flex-direction: column;
     overflow-y: auto;
-    box-shadow: 4px 0 24px rgba(0, 0, 0, 0.15);
+    box-shadow: 4px 0 24px rgba(0, 0, 0, 0.18);
   }
 
   /* ── Drawer Header ── */
@@ -307,6 +305,7 @@
     justify-content: space-between;
     padding: 18px 20px;
     border-bottom: 1px solid rgba(0, 0, 0, 0.07);
+    flex-shrink: 0;
   }
 
   .drawer-close-btn {
@@ -343,7 +342,7 @@
     display: flex;
     align-items: center;
     gap: 14px;
-    padding: 16px 24px;
+    padding: 17px 24px;
     text-decoration: none;
     color: var(--text-dark);
     font-size: 1.05rem;
@@ -369,7 +368,7 @@
 
   .drawer-link-icon {
     font-size: 18px;
-    opacity: 0.65;
+    opacity: 0.6;
     flex-shrink: 0;
     display: flex;
     align-items: center;
@@ -381,11 +380,12 @@
 
   /* ── Drawer Footer ── */
   .drawer-footer {
-    padding: 16px 20px 28px;
+    padding: 16px 20px 32px;
     display: flex;
     flex-direction: column;
     gap: 14px;
     border-top: 1px solid rgba(0, 0, 0, 0.07);
+    flex-shrink: 0;
   }
 
   /* Language selector in drawer */
@@ -393,15 +393,14 @@
     display: flex;
     align-items: center;
     gap: 8px;
-    border: 1px solid rgba(0, 0, 0, 0.18);
+    border: 1px solid rgba(0, 0, 0, 0.2);
     border-radius: 50px;
     padding: 10px 16px;
-    cursor: pointer;
     background: transparent;
   }
 
   .drawer-globe-icon {
-    font-size: 16px;
+    font-size: 15px;
     color: var(--text-dark);
     flex-shrink: 0;
   }
@@ -421,18 +420,17 @@
   }
 
   .drawer-chevron-icon {
-    font-size: 12px;
+    font-size: 11px;
     color: var(--text-dark);
+    opacity: 0.55;
     flex-shrink: 0;
-    opacity: 0.6;
   }
 
-  /* Auth section in drawer */
+  /* Auth in drawer */
   .drawer-auth {
     display: flex;
     flex-direction: column;
     gap: 10px;
-    align-items: stretch;
   }
 
   .drawer-user-info {
@@ -440,10 +438,10 @@
     color: var(--text-dark);
     font-weight: 500;
     text-align: center;
-    padding: 4px 0;
+    padding: 2px 0;
   }
 
-  /* Big logout / login / register button */
+  /* Primary action button (Logout / Register) */
   .drawer-logout-btn {
     display: flex;
     align-items: center;
@@ -468,13 +466,14 @@
     transform: translateY(-1px);
   }
 
+  /* Secondary action button (Login) */
   .drawer-login-btn {
     display: flex;
     align-items: center;
     justify-content: center;
     gap: 10px;
     width: 100%;
-    padding: 14px 20px;
+    padding: 13px 20px;
     border-radius: 50px;
     background-color: transparent;
     color: var(--primary-dark-green);
@@ -494,7 +493,7 @@
 }
 
 /* ============================================================
-   Small Mobile (≤ 400px)
+   Small Mobile (≤ 400px) — UNCHANGED
    ============================================================ */
 @media (max-width: 400px) {
   .logo {
