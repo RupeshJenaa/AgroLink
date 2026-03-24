@@ -10,23 +10,22 @@ logger = logging.getLogger(__name__)
 # load variables from .env file
 load_dotenv()
 
-# Use the new google.genai SDK
-from google import genai
-from google.genai import types
+# Use the Groq SDK
+from groq import Groq
 
-# Create the client
-client = genai.Client(api_key=os.getenv("GEMINI_API_KEY"))
+# Create the client — it automatically looks for GROQ_API_KEY in environment
+# Since you might have pasted it in .env, ensure it's loaded
+client = Groq(api_key=os.getenv("GROQ_API_KEY"))
 
-# Model to use — gemini-2.0-flash is the most widely available
-MODEL_ID = "gemini-2.0-flash"
+# Model to use — Groq's lightning fast, very capable and completely free model
+MODEL_ID = "llama-3.3-70b-versatile"
 
-# Generation config
-generation_config = types.GenerateContentConfig(
-    temperature=0.7,
-    top_p=0.95,
-    top_k=64,
-    max_output_tokens=8192,
-)
+# Generation configuration mapping (similar parameters to what we had)
+generation_kwargs = {
+    "temperature": 0.7,
+    "top_p": 0.95,
+    "max_tokens": 8192,
+}
 
 # Load FAQ dataset
 faq_data = []
@@ -158,15 +157,21 @@ Do not make up information that you're not confident about.
 Remember: Your entire response must be in {language_name} only.
                 """
                 
-                response = client.models.generate_content(
+                # Groq Chat Completions API Call
+                response = client.chat.completions.create(
                     model=MODEL_ID,
-                    contents=prompt,
-                    config=generation_config,
+                    messages=[
+                        {
+                            "role": "user",
+                            "content": prompt
+                        }
+                    ],
+                    **generation_kwargs
                 )
                 
                 # Check if response has valid content
-                if response and response.text:
-                    ai_response = response.text.strip()
+                if response and response.choices and response.choices[0].message.content:
+                    ai_response = response.choices[0].message.content.strip()
                     logger.info("AI response generated successfully in %s: %s...", language_name, ai_response[:100])
                 else:
                     logger.warning("AI response is empty or invalid")
@@ -188,7 +193,7 @@ Remember: Your entire response must be in {language_name} only.
                     
                     "hi": "मुझे आपके प्रश्न का विस्तृत उत्तर देने में वर्तमान में समस्या हो रही है। यहां कुछ सामान्य कृषि सुझाव दिए गए हैं जो आपकी मदद कर सकते हैं:\n\n1. फसल चयन के लिए, अपनी स्थानीय मिट्टी के प्रकार और जलवायु परिस्थितियों पर विचार करें\n2. नियमित मिट्टी परीक्षण आपकी फसलों के लिए सही उर्वरक निर्धारित करने में मदद करता है\n3. उचित सिंचाई अनुसूची स्वस्थ पौधों की वृद्धि के लिए महत्वपूर्ण है\n4. कीट का प्रारंभिक पता लगाना और प्रबंधन आपकी फसलों को बचा सकता है\n5. फसल चक्र मिट्टी की उर्वरता को बनाए रखने में मदद करता है\n\nअधिक विशिष्ट सलाह के लिए, कृपया अपने प्रश्न को फिर से बताने का प्रयास करें या फसलों, उर्वरकों, मौसम या पौधों की बीमारियों के बारे में पूछें।",
                     
-                    "or": "ମୁଁ ବର୍ତ୍ତମାନ ଆପଣଙ୍କ ପ୍ରଶ୍ନର ବିସ୍ତୃତ ଉତ୍ତର ଦେବାରେ ଅସମର୍ଥ। ଏଠାରେ କିଛି ସାଧାରଣ କୃଷି ସୁଝାବ ଅଛି:\n\n1. ଫସଲ ଚୟନ ପାଇଁ ଆପଣଙ୍କ ସ୍ଥାନୀୟ ମାଟିର ପ୍ରକାର ଏବଂ ଜଳବାୟୁ ବିଚାର କରନ୍ତୁ\n2. ନିୟମିତ ମାଟି ପରୀକ୍ଷା ଆପଣଙ୍କ ଫସଲ ପାଇଁ ସଠିକ୍ ସାର ନିର୍ଧାରଣ କରିବାରେ ସାହାଯ୍ୟ କରେ\n3. ସ୍�ାସ୍ଥ୍ୟକର ଉଦ୍ଭିଦ ବୃଦ୍ଧି ପାଇଁ ଉଚିତ ଜଳସେଚନ ଗୁରୁତ୍ୱପୂର୍ଣ୍ଣ\n4. ଆଦିମ କୀଟ ଚିହ୍ନଟ ଆପଣଙ୍କ ଫସଲ ବଞ୍ଚାଇ ପାରିବ\n5. ଫସଲ ଚକ୍ର ମାଟିର ଉର୍ବରତା ବଜାୟ ରଖିବାରେ ସାହାଯ୍ୟ କରେ",
+                    "or": "ମୁଁ ବର୍ତ୍ତମାନ ଆପଣଙ୍କ ପ୍ରଶ୍ନର ବିସ୍ତୃତ ଉତ୍ତର ଦେବାରେ ଅସମର୍ଥ। ଏଠାରେ କିଛି ସାଧାରଣ କୃଷି ସୁଝାବ ଅଛି:\n\n1. ଫସଲ ଚୟନ ପାଇଁ ଆପଣଙ୍କ ସ୍ଥାନୀୟ ମାଟିର ପ୍ରକାର ଏବଂ ଜଳବାୟୁ ବିଚାର କରନ୍ତୁ\n2. ନିୟମିତ ମାଟି ପରୀକ୍ଷା ଆପଣଙ୍କ ଫସଲ ପାଇଁ ସଠିକ୍ ସାର ନିର୍ଧାରଣ କରିବାରେ ସାହାଯ୍ୟ କରେ\n3. ସ୍ାସ୍ଥ୍ୟକର ଉଦ୍ଭିଦ ବୃଦ୍ଧି ପାଇଁ ଉଚିତ ଜଳସେଚନ ଗୁରୁତ୍ୱପୂର୍ଣ୍ଣ\n4. ଆଦିମ କୀଟ ଚିହ୍ନଟ ଆପଣଙ୍କ ଫସଲ ବଞ୍ଚାଇ ପାରିବ\n5. ଫସଲ ଚକ୍ର ମାଟିର ଉର୍ବରତା ବଜାୟ ରଖିବାରେ ସାହାଯ୍ୟ କରେ",
                     
                     "bn": "আমি বর্তমানে আপনার প্রশ্নের বিস্তারিত উত্তর দিতে অক্ষম। এখানে কিছু সাধারণ কৃষি পরামর্শ রয়েছে:\n\n1. ফসল নির্বাচনের জন্য আপনার স্থানীয় মাটির ধরন এবং জলবায়ু বিবেচনা করুন\n2. নিয়মিত মাটি পরীক্ষা আপনার ফসলের জন্য সঠিক সার নির্ধারণে সাহায্য করে\n3. সুস্থ উদ্ভিদ বৃদ্ধির জন্য সঠিক সেচ গুরুত্বপূর্ণ\n4. প্রাথমিক কীটপতঙ্গ সনাক্তকরণ আপনার ফসল বাঁচাতে পারে\n5. শস্য আবর্তন মাটির উর্বরতা বজায় রাখতে সাহায্য করে",
                     

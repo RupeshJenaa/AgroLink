@@ -2,7 +2,7 @@
 fastapi
 uvicorn
 python-dotenv
-google-genai
+groq
 scikit-learn==1.3.2
 pandas
 numpy
