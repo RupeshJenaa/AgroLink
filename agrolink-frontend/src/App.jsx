@@ -13,6 +13,7 @@ import Chatbot from "./pages/Chatbot";
 import AdminPanel from "./pages/AdminPanel";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
+import Profile from "./pages/Profile";
 
 import Navbar from "./components/Navbar";
 import PageAlert from './components/PageAlert';
@@ -39,6 +40,7 @@ function App() {
             <Route path="/" element={<Home setIsChatbotOpen={setIsChatbotOpen} />} />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
+            <Route path="/profile" element={<Profile />} />
 
             {/* Public routes (visible to all) */}
             <Route path="/weather" element={<Weather />} />

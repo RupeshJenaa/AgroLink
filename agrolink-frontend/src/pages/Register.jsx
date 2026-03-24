@@ -1,4 +1,12 @@
 import React, { useState } from 'react';
+
+const INDIAN_STATES = [
+  "Andhra Pradesh", "Arunachal Pradesh", "Assam", "Bihar", "Chhattisgarh",
+  "Goa", "Gujarat", "Haryana", "Himachal Pradesh", "Jharkhand", "Karnataka",
+  "Kerala", "Madhya Pradesh", "Maharashtra", "Manipur", "Meghalaya", "Mizoram",
+  "Nagaland", "Odisha", "Punjab", "Rajasthan", "Sikkim", "Tamil Nadu",
+  "Telangana", "Tripura", "Uttar Pradesh", "Uttarakhand", "West Bengal"
+];
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import './Register.css';
@@ -9,7 +17,8 @@ const Register = () => {
         email: '',
         password: '',
         confirmPassword: '',
-        role: 'farmer'
+        role: 'farmer',
+        state: ''
     });
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
@@ -54,7 +63,8 @@ const Register = () => {
                 formData.email,
                 formData.password,
                 formData.name,
-                formData.role
+                formData.role,
+                formData.state
             );
 
             if (result.success) {
@@ -170,6 +180,24 @@ const Register = () => {
                             autoComplete="new-password"
                             aria-required="true"
                         />
+                    </div>
+
+                    <div className="form-group">
+                        <label htmlFor="state">Your State</label>
+                        <select
+                            id="state"
+                            name="state"
+                            value={formData.state}
+                            onChange={handleChange}
+                            required
+                            aria-required="true"
+                            style={{ width: '100%', padding: '0.75rem 1rem', borderRadius: '10px', border: '1.5px solid rgba(255,255,255,0.2)', background: 'rgba(255,255,255,0.08)', color: 'inherit', fontSize: '1rem', marginTop: '0.25rem' }}
+                        >
+                            <option value="">-- Select your state --</option>
+                            {INDIAN_STATES.map((s) => (
+                                <option key={s} value={s} style={{ background: '#1a2a1a', color: '#fff' }}>{s}</option>
+                            ))}
+                        </select>
                     </div>
 
                     {/* Role Selector — visual card toggle */}

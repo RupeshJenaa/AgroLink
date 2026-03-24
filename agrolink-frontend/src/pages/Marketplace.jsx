@@ -20,12 +20,12 @@ const INDIAN_STATES = [
 
 const Marketplace = () => {
   const { t } = useTranslation();
-  const { isAuthenticated, user, role, isFarmer } = useAuth();
+  const { isAuthenticated, user, role, isFarmer, userState } = useAuth();
   const [formData, setFormData] = useState({
     crop: "",
     quantity: "",
     price: "",
-    state: "",
+    state: userState || "",
     contact: ""
   });
   const [listings, setListings] = useState([]);
@@ -38,6 +38,13 @@ const Marketplace = () => {
 
   // Only authenticated farmers can create listings
   const canCreateListing = isAuthenticated && isFarmer;
+
+  // ── Default state to user's registered state ────────────────────────────
+  useEffect(() => {
+    if (userState) {
+      setFormData((prev) => ({ ...prev, state: prev.state || userState }));
+    }
+  }, [userState]);
 
   // ── Fetch listings ────────────────────────────────────────────────────────
   useEffect(() => {
@@ -128,7 +135,7 @@ const Marketplace = () => {
       };
       await addDoc(collection(db, "marketplace"), listingData);
       setStatus("✅ " + t('marketplace.listedSuccessfully'));
-      setFormData({ crop: "", quantity: "", price: "", state: "", contact: "" });
+      setFormData({ crop: "", quantity: "", price: "", state: userState || "", contact: "" });
       setSuggestedPrice(null);
 
       // Refresh listings

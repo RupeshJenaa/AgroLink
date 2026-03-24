@@ -17,7 +17,8 @@ import {
   FaSignOutAlt,
   FaBars,
   FaTimes,
-  FaChevronDown
+  FaChevronDown,
+  FaUserCircle
 } from "react-icons/fa";
 import icon from "../assets/icon.png";
 
@@ -26,7 +27,7 @@ import "./Navbar.css";
 const Navbar = () => {
   const { t } = useTranslation();
   const { currentLanguage, changeLanguage } = useLanguage();
-  const { isAuthenticated, user, role, logout } = useAuth();
+  const { isAuthenticated, user, role, userState, logout } = useAuth();
   const navigate = useNavigate();
   const [menuOpen, setMenuOpen] = useState(false);
 
@@ -152,8 +153,11 @@ const Navbar = () => {
                 {isAuthenticated ? (
                   <>
                     <span className="user-info">
-                      {user?.email} ({role})
+                      {user?.email} ({role}){userState ? ` · ${userState}` : ''}
                     </span>
+                    <NavLink to="/profile" className="auth-button login-button" onClick={handleNavClick} title="Edit Profile">
+                      <FaUserCircle aria-hidden="true" /> Profile
+                    </NavLink>
                     <button onClick={handleLogout} className="auth-button logout-button">
                       <FaSignOutAlt aria-hidden="true" /> Logout
                     </button>
@@ -254,7 +258,10 @@ const Navbar = () => {
 
                 {isAuthenticated ? (
                   <div className="drawer-auth">
-                    <span className="drawer-user-info">{user?.email} ({role})</span>
+                    <span className="drawer-user-info">{user?.email} ({role}){userState ? ` · ${userState}` : ''}</span>
+                    <NavLink to="/profile" className="drawer-login-btn" onClick={handleNavClick}>
+                      <FaUserCircle aria-hidden="true" /> My Profile
+                    </NavLink>
                     <button onClick={handleLogout} className="drawer-logout-btn">
                       <FaSignOutAlt aria-hidden="true" /> Logout
                     </button>

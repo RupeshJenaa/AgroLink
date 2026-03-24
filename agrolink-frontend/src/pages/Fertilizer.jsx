@@ -1,10 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { fertilizer } from "../services/api";
+import { useAuth } from "../context/AuthContext";
 import "./Fertilizer.css";
+
+const OWM_API_KEY = 'be2858ba0d7ed98919cb67658c1a5da6';
 
 const Fertilizer = () => {
   const { t, i18n } = useTranslation();
+  const { userState } = useAuth();
   const [formData, setFormData] = useState({
     crop_type: "",
     soil_type: "",
@@ -21,6 +25,34 @@ const Fertilizer = () => {
   const [availableSoils, setAvailableSoils] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [weatherNote, setWeatherNote] = useState("");
+
+  // Auto-fill weather data from user's state
+  useEffect(() => {
+    if (!userState) return;
+    const fetchWeather = async () => {
+      try {
+        const res = await fetch(
+          `https://api.openweathermap.org/data/2.5/weather?q=${userState},IN&units=metric&appid=${OWM_API_KEY}`
+        );
+        const data = await res.json();
+        if (data.cod === 200) {
+          // Soil moisture approximated: inverse of pressure-normalized humidity
+          const approxMoisture = Math.min(100, (data.main.humidity * 0.7).toFixed(1));
+          setFormData((prev) => ({
+            ...prev,
+            temperature: data.main.temp.toFixed(1),
+            humidity: data.main.humidity.toFixed(1),
+            moisture: approxMoisture,
+          }));
+          setWeatherNote(`🌤️ Weather auto-filled from ${data.name} (${userState})`);
+        }
+      } catch {
+        // Silently fail; user fills manually
+      }
+    };
+    fetchWeather();
+  }, [userState]);
 
   // Fetch available options on mount
   useEffect(() => {
@@ -77,6 +109,9 @@ const Fertilizer = () => {
     <div className="fertilizer-container">
       <h2>🌱 {t('fertilizer.title')}</h2>
       <p className="subtitle">{t('fertilizer.subtitle')}</p>
+      {weatherNote && (
+        <p style={{ color: '#7ecb6f', fontSize: '0.9rem', marginBottom: '0.75rem' }}>{weatherNote}</p>
+      )}
 
       <div className="fertilizer-content">
         <form onSubmit={handleSubmit} className="fertilizer-form">
