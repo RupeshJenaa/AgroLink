@@ -152,9 +152,7 @@ const Navbar = () => {
               <div className="auth-section">
                 {isAuthenticated ? (
                   <>
-                    {/* <span className="user-info">
-                      {user?.email} ({role}){userState ? ` · ${userState}` : ''}
-                    </span> */}
+
                     <NavLink to="/profile" className="auth-button login-button" onClick={handleNavClick} title="Edit Profile">
                       <FaUserCircle aria-hidden="true" /> Profile
                     </NavLink>
@@ -258,7 +256,7 @@ const Navbar = () => {
 
                 {isAuthenticated ? (
                   <div className="drawer-auth">
-                    {/* <span className="drawer-user-info">{user?.email} ({role}){userState ? ` · ${userState}` : ''}</span> */}
+
                     <NavLink to="/profile" className="drawer-login-btn" onClick={handleNavClick}>
                       <FaUserCircle aria-hidden="true" /> My Profile
                     </NavLink>
