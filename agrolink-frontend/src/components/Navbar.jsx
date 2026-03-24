@@ -27,7 +27,7 @@ import "./Navbar.css";
 const Navbar = () => {
   const { t } = useTranslation();
   const { currentLanguage, changeLanguage } = useLanguage();
-  const { isAuthenticated, user, role, userState, logout } = useAuth();
+  const { isAuthenticated, role, logout } = useAuth();
   const navigate = useNavigate();
   const [menuOpen, setMenuOpen] = useState(false);
 
