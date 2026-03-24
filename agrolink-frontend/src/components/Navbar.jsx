@@ -258,7 +258,7 @@ const Navbar = () => {
 
                 {isAuthenticated ? (
                   <div className="drawer-auth">
-                    <span className="drawer-user-info">{user?.email} ({role}){userState ? ` · ${userState}` : ''}</span>
+                    {/* <span className="drawer-user-info">{user?.email} ({role}){userState ? ` · ${userState}` : ''}</span> */}
                     <NavLink to="/profile" className="drawer-login-btn" onClick={handleNavClick}>
                       <FaUserCircle aria-hidden="true" /> My Profile
                     </NavLink>
