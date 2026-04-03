@@ -18,6 +18,9 @@ import os
 import json
 import copy
 import time
+import numpy as np
+
+from sklearn.metrics import classification_report, confusion_matrix
 
 import torch
 import torch.nn as nn
@@ -343,10 +346,59 @@ def main():
     }, model_path)
     print(f"✓ Saved {MODEL_FILENAME}")
 
+    # ── Post-training Evaluation (Confusion Matrix + Classification Report) ──
+    print("\n" + "=" * 50)
+    print("Post-Training Evaluation on Validation Set")
+    print("=" * 50)
+
+    model.eval()
+    all_preds  = []
+    all_labels = []
+
+    # Use a fresh val dataloader with val_tf (not train augmentations)
+    val_eval_ds = copy.deepcopy(full_dataset)
+    val_eval_ds.transform = val_tf
+    from torch.utils.data import Subset
+    val_eval_loader = DataLoader(
+        Subset(val_eval_ds, val_ds.indices),
+        batch_size=BATCH_SIZE,
+        shuffle=False,
+        num_workers=NUM_WORKERS,
+    )
+
+    with torch.no_grad():
+        for inputs, labels in val_eval_loader:
+            inputs = inputs.to(device)
+            outputs = model(inputs)
+            preds = outputs.argmax(dim=1).cpu().numpy()
+            all_preds.extend(preds.tolist())
+            all_labels.extend(labels.numpy().tolist())
+
+    # Classification report
+    print("\nClassification Report:")
+    report = classification_report(
+        all_labels, all_preds,
+        target_names=class_names,
+        digits=4
+    )
+    print(report)
+
+    # Confusion matrix
+    cm = confusion_matrix(all_labels, all_preds)
+    cm_dict = {
+        "class_names": class_names,
+        "matrix": cm.tolist()
+    }
+    cm_path = os.path.join(OUTPUT_DIR, "confusion_matrix.json")
+    with open(cm_path, "w") as f:
+        json.dump(cm_dict, f, indent=2)
+    print(f"\n✓ Confusion matrix saved to: {cm_path}")
+
     print("\n=== Training Complete ===")
-    print(f"Model    : {model_path}")
-    print(f"Labels   : {labels_path}")
-    print(f"Treatments: {treatment_path}")
+    print(f"Model      : {model_path}")
+    print(f"Labels     : {labels_path}")
+    print(f"Treatments : {treatment_path}")
+    print(f"Conf. Matrix: {cm_path}")
     print("\nRestart the FastAPI server and test the /api/disease/predict endpoint.")
 
 

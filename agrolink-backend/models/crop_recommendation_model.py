@@ -11,8 +11,14 @@ def train_crop_recommendation_model():
     """
     Train a crop recommendation model using the dataset
     """
+    # Resolve dataset path dynamically from script location
+    current_dir = os.path.dirname(os.path.abspath(__file__))
+    backend_dir = os.path.dirname(current_dir)
+    project_root = os.path.dirname(backend_dir)
+    dataset_path = os.path.join(project_root, 'Crop_recommendation.csv')
+
     # Load the dataset
-    data = pd.read_csv('../../Crop_recommendation.csv')
+    data = pd.read_csv(dataset_path)
     
     # Separate features and target
     X = data.drop('label', axis=1)
